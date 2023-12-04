@@ -3,14 +3,11 @@
 ## Instrucciones
 
 ### Iniciar entorno virtual
-```
->>> python -m venv [name_venv]
-
-En este caso:
->>> python -m venv pypoetry-venv
+```commandline
+python -m venv pypoetry-venv
 ```
 ### Verificar inicio de entorno virtual
-```
+```commandline
 which python
 ```
 Si el entorno virtual está iniciado, el comando devolverá la ruta al intérprete de Python del entorno virtual. 
@@ -31,19 +28,19 @@ Si el entorno virtual no está iniciado, el comando which python devolverá la r
 El comando ```echo $VIRTUAL_ENV``` devolverá una cadena vacía.
 
 Si el entorno virtual no está iniciado, puedes iniciarlo con el siguiente comando:
-```
+```commandline
 source venv/bin/activate
 ```
 ## Instalar paquetes necesarios
 
 Una vez que el entorno virtual esté activado, puedes instalar los paquetes necesarios para el proyecto:
-```
+```commandline
 pip install -r requirements.txt
 ```
 * ``` requirements.txt ``` corresponde a los paquetes a instalar
 
 Tambien se puede generar el archivo ``` requirements.txt ``` para compatibilidad con otros sistemas, de la siguiente forma:
-```
+```commandline
 poetry export -f requirements.txt --output requirements.txt --without-hashes
 ```
 Inicialmente se genera un archivo que contiene una configuración similar a esta:
@@ -59,7 +56,7 @@ tzdata==2023.3 ; python_version >= "3.11" and python_version < "4.0" and sys_pla
 Para configurar Poetry, puedes seguir los siguientes pasos:
 
 1. Instala Poetry con el siguiente comando:
-```
+```commandline
 pip install poetry
 ```
 2. Crea un nuevo archivo ``` pyproject.toml ``` en la raíz del proyecto. Este archivo contiene la configuración de 
@@ -84,9 +81,78 @@ isort = "^5.9.3"
 ```
 
 4. Usa el siguiente comando para instalar los paquetes necesarios para el proyecto:
-```
+```commandline
 poetry install
 ```
 Esto instalará los paquetes especificados en el archivo ``` pyproject.toml ```.
 
-## Integración ReactJS en Django + Python + NextJs
+* Tambien se puede agregar dependencias con el comando ``` poetry add ```
+
+
+## Integración ReactJS + NextJs en Django + Python
+
+### Crear proyecto Django
+```commandline
+django-admin startproject pypoetry_reactnextjs
+```
+### Crear aplicación Django
+Para crear la aplicación Django debe  ingresar al folder ```pypoetry_reactnextjs```, y ejecutar el comando:
+
+```commandline
+cd pypoetry_reactnextjs
+python manage.py startapp pypoetry_reactnextjsapp
+```
+## Configuración de Backend
+
+1. Instalar Django CORS headers
+```commandline
+pip install django-cors-headers
+```
+2. Configurar CORS
+Agregar propiedades CORS al archivo ````settings.py````
+```
+INSTALLED_APPS = [
+    # ...
+    'corsheaders',
+    'pypoetry_reactnextjsapp',
+]
+
+MIDDLEWARE = [
+    # ...
+    'corsheaders.middleware.CorsMiddleware',
+    # ...
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # o la URL del frontend
+]
+```
+
+## Configuración de Frontend
+
+1. Crear entorno React+NextJs
+````commandline
+npx create-next-app@latest
+````
+Con este comando se despliega en la terminal un menu de configuración como el que se muestra a continuación:
+
+```
+What is your project named? pypoetry_reactnextjs_frontend
+Would you like to use TypeScript? No / Yes
+Would you like to use ESLint? No / Yes
+Would you like to use Tailwind CSS? No / Yes
+Would you like to use `src/` directory? No / Yes
+Would you like to use App Router? (recommended) No / Yes
+Would you like to customize the default import alias (@/*)? No / Yes
+What import alias would you like configured? @/*
+```
+2. Configuración de Django **'whitenoise'** para manejo de archivos estaticos
+
+Nota:_Este paso puede omitirse según los archivos a servir._
+```commandline
+pip install whitenoise
+```
+
+
+
+
